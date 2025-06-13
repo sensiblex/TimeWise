@@ -1,0 +1,12 @@
+# Файлы, игнорируемые по умолчанию
+/shelf/
+/workspace.xml
+.md
+*.db
+.venv
+__pycache__
+# Запросы HTTP-клиента в редакторе
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
