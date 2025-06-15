@@ -17,7 +17,3 @@ class Activity:
         """)
     def __eq__(self, other):
         return self.name == other.name
-
-# activities = Activity('123', 'sport', 2)
-#
-# print(activities)
