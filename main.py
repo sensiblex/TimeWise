@@ -1,4 +1,4 @@
-from activities import *
+from activity import *
 from manage import *
 
 a = Activity('some active', 'sport', 2)
