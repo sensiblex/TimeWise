@@ -1,5 +1,4 @@
 import datetime as tm
-
 class Activity:
 
     def __init__(self, name=None, activity=None, duration=1, *args, **kwargs):

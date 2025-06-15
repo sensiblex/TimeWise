@@ -1,23 +1,53 @@
+import sqlite3 #TODO реализовать работу с бд
+
 class Activities:
-    def __init__(self):
-        self.activities = {}
+    def __init__(self, bd='activities.db' ):
+        self.db_name = bd
+        self.conn = None
+        self._create_connection()
+        self._create_table()
 
-    def __str__(self):
-        for k,v in self.activities.items():
-            print(v)
-        return ''
+    # def __str__(self): #TODO вывод активностей реализовать
+    #     for k,v in self.activities.items():
+    #         print(v)
+    #     return ''
 
-    def add(self, activity):
-        self.activities[len(self.activities)+1] = activity
+    def _create_connection(self):
+        try:
+            self.conn = sqlite3.connect(self.db_name)
+            self.conn.row_factory = sqlite3.Row
+            print('Connected to database')
+        except sqlite3.Error as e:
+            self.conn = None
+            print(e)
 
-    def remove(self, n):
-        del self.activities[n]
-        temp = self.activities
-        self.activities = {}
-        ln = 1
-        for k in temp.values():
-            self.activities[ln] = k
-            ln += 1
+    def _create_table(self):
+        if self.conn:
+            try:
+                cursor = self.conn.cursor()
+                cursor.execute("""CREATE TABLE IF NOT EXISTS activities (
+                time TEXT,
+                name TEXT,
+                type_of_activity TEXT,
+                deadline TEXT
+                )""")
+                self.conn.commit()
+                print('Table created successfully')
+            except sqlite3.Error as e:
+                print(e)
+        else:
+            print("Не удалось создать таблицу: нет соединения с БД.")
 
-    def rename(self, n, new_name):
-        self.activities[n].name = new_name
+    # def add(self, activity): #Реализовать добавление активностей
+    #     self.activities[len(self.activities)+1] = activity
+    #
+    # def remove(self, n): #Удаление активности
+    #     del self.activities[n]
+    #     temp = self.activities
+    #     self.activities = {}
+    #     ln = 1
+    #     for k in temp.values():
+    #         self.activities[ln] = k
+    #         ln += 1
+
+activities = Activities('activities.db')
