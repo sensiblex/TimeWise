@@ -1,7 +1,7 @@
 import unittest
 from activity import *
 
-class MyTestCase(unittest.TestCase):
+class MyTestCase(unittest.TestCase): #TODO сделать норм тесты
     def test_something(self):
         activity = Activity('some active', 'sport', 2)
         self.assertEqual(activity.name, 'some active', 'activity name has problem')
