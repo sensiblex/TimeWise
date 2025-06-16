@@ -34,15 +34,12 @@ while True:
         #     else:
         #         print('Список активностей пуст')
         #
-        # elif com == 3:
-        #     if storage.activities:
-        #         for k, v in storage.activities.items():
-        #             print(k, v.name)
-        #         n = int(input('Введите номер активности которую нужно удалить: '))
-        #         print(f'Удалена активность {v.name}')
-        #         storage.remove(n)
-        #     else:
-        #         print('Список активностей пуст')
+        elif com == 3:
+            storage.show()
+            n = int(input('Введите номер активности которую нужно удалить: '))
+
+            storage.remove(n)
+
     except ValueError:
         print('Неверное значение')
 

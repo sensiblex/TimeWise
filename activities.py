@@ -54,19 +54,19 @@ class Activities:
         if self.conn:
             try:
                 cursor = self.conn.cursor()
-                cursor.execute("SELECT * FROM activities")
+                cursor.execute("SELECT rowid, * FROM activities")
                 rows = cursor.fetchall()
-                activities_list = [dict(row) for row in rows]
+                activities_list =[dict(row) for row in rows]
                 for el in activities_list:
                     print(el)
             except sqlite3.Error as e:
                 print(e)
 
-    # def remove(self, n): #TODO Удаление активности
-    #     del self.activities[n]
-    #     temp = self.activities
-    #     self.activities = {}
-    #     ln = 1
-    #     for k in temp.values():
-    #         self.activities[ln] = k
-    #         ln += 1
+    def remove(self, n): #TODO Удаление активности
+        if self.conn:
+            try:
+                cursor = self.conn.cursor()
+                cursor.execute("DELETE FROM activities WHERE rowid = (?)", (n,))
+                self.conn.commit()
+            except sqlite3.Error as e:
+                print(e)
