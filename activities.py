@@ -38,10 +38,20 @@ class Activities:
         else:
             print("Не удалось создать таблицу: нет соединения с БД.")
 
-    # def add(self, activity): #Реализовать добавление активностей
-    #     self.activities[len(self.activities)+1] = activity
-    #
-    # def remove(self, n): #Удаление активности
+    def add(self, activity): #TODO Реализовать добавление активностей
+        if self.conn:
+            try:
+                cursor = self.conn.cursor()
+                __time = str(activity.time)
+                __name = activity.name
+                __type_of_activity = activity.type_of_activity
+                __deadline = str(activity.deadline)
+                cursor.execute("INSERT INTO activities (time, name, type_of_activity, deadline) VALUES (?, ?, ?, ?)", (__time, __name, __type_of_activity, __deadline))
+                self.conn.commit()
+            except sqlite3.Error as e:
+                print(e)
+
+    # def remove(self, n): #TODO Удаление активности
     #     del self.activities[n]
     #     temp = self.activities
     #     self.activities = {}
@@ -49,5 +59,3 @@ class Activities:
     #     for k in temp.values():
     #         self.activities[ln] = k
     #         ln += 1
-
-activities = Activities('activities.db')
