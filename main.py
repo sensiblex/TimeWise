@@ -12,7 +12,7 @@ while True:
         elif com == 1:
             name = input("Введите название активности: ")
             type_of_activity = input("Введите тип активности: ")
-            duration = int(input("Введите продолжительность активности(в часах): "))
+            duration = int(input("Введите продолжительность активности(в минутах): "))
             act = Activity(name, type_of_activity, duration)
             storage.add(act)
             print(f'Добавлена активность {act}')
@@ -37,7 +37,6 @@ while True:
         elif com == 3:
             storage.show()
             n = int(input('Введите номер активности которую нужно удалить: '))
-
             storage.remove(n)
 
     except ValueError:

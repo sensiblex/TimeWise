@@ -29,7 +29,7 @@ class Activities:
                 time TEXT,
                 name TEXT,
                 type_of_activity TEXT,
-                deadline TEXT
+                duration TEXT
                 )""")
                 self.conn.commit()
                 print('Table created successfully')
@@ -45,8 +45,8 @@ class Activities:
                 __time = str(activity.time)
                 __name = activity.name
                 __type_of_activity = activity.type_of_activity
-                __deadline = str(activity.deadline)
-                cursor.execute("INSERT INTO activities (time, name, type_of_activity, deadline) VALUES (?, ?, ?, ?)", (__time, __name, __type_of_activity, __deadline))
+                __duration = str(activity.duration)
+                cursor.execute("INSERT INTO activities (time, name, type_of_activity, duration) VALUES (?, ?, ?, ?)", (__time, __name, __type_of_activity, __duration))
                 self.conn.commit()
             except sqlite3.Error as e:
                 print(e)
