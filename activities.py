@@ -56,9 +56,12 @@ class Activities:
                 cursor = self.conn.cursor()
                 cursor.execute("SELECT rowid, * FROM activities")
                 rows = cursor.fetchall()
-                activities_list =[dict(row) for row in rows]
-                for el in activities_list:
-                    print(el)
+                if rows:
+                    activities_list =[dict(row) for row in rows]
+                    for el in activities_list:
+                        print(el)
+                else:
+                    print('Пустовато :(')
             except sqlite3.Error as e:
                 print(e)
 
