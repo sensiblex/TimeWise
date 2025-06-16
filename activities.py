@@ -1,4 +1,4 @@
-import sqlite3 #TODO реализовать работу с бд
+import sqlite3
 
 class Activities:
     def __init__(self, bd='activities.db' ):
@@ -20,7 +20,7 @@ class Activities:
         except sqlite3.Error as e:
             print(e)
 
-    def add(self, activity): #TODO Реализовать добавление активностей
+    def add(self, activity):
         try:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
@@ -49,7 +49,7 @@ class Activities:
         except sqlite3.Error as e:
             print(e)
 
-    def remove(self, n): #TODO Удаление активности
+    def remove(self, n):
         try:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
