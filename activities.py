@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import datetime
+
 
 class Activities:
     def __init__(self, bd='activities.db' ):
@@ -57,3 +59,26 @@ class Activities:
                 conn.commit()
         except sqlite3.Error as e:
             print(e)
+
+    def report(self):
+        try:
+            with sqlite3.connect(self.db_name) as conn:
+                cursor = conn.cursor()
+                today_date = datetime.today().strftime('%d.%m.%Y')
+                cursor.execute("SELECT time, name, type_of_activity, duration FROM activities")
+                rows = cursor.fetchall()
+                if rows:
+                    for row in rows:
+                        if today_date == datetime.strptime(row[0], '%d.%m.%Y').strftime('%d.%m.%Y'):
+                            print(*row)
+                else:
+                    print('На сегодня пусто')
+
+        except sqlite3.Error as e:
+            print(e)
+
+# conn = sqlite3.connect('activities.db')
+# cursor = conn.cursor()
+# cursor.execute("DROP TABLE activities")
+# conn.commit()
+# conn.close()
