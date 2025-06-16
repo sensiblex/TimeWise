@@ -2,7 +2,7 @@ import datetime as tm
 class Activity:
 
     def __init__(self, name=None, activity=None, duration=1):
-        self.time = tm.datetime.now()
+        self.time = tm.datetime.now().strftime("%d.%m.%Y")
         self.name = name
         self.type_of_activity = activity
         self.duration = duration
