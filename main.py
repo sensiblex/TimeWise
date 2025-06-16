@@ -22,6 +22,3 @@ while True:
 
     except ValueError:
         print('Неверное значение')
-
-# noinspection PyUnreachableCode
-storage.conn.close()
