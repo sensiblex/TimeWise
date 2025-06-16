@@ -4,8 +4,11 @@ from activity import *
 storage = Activities()
 while True:
     try:
-        com = int(input("Введите команду(0 - Печать всех активностей, 1 - добавить, 2 - удалить: "))
-        if com == 0:
+        com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить: "))
+        if com == -1:
+            print("Выход")
+            break
+        elif com == 0:
             storage.show()
             pass
         elif com == 1:
