@@ -4,3 +4,4 @@ Tests
 __pycache__
 .idea
 .db
+activities.db
