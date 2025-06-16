@@ -7,10 +7,7 @@ while True:
     try:
         com = int(input("Введите команду(0 - Печать всех активностей, 1 - добавить, 2 - переименовать, 3 - удалить: "))
         if com == 0:
-            # if storage.activities:
-            #     print(storage)
-            # else:
-            #     print('Список активностей пуст')
+            storage.show()
             pass
         elif com == 1:
             name = input("Введите название активности: ")

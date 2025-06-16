@@ -50,6 +50,17 @@ class Activities:
                 self.conn.commit()
             except sqlite3.Error as e:
                 print(e)
+    def show(self):
+        if self.conn:
+            try:
+                cursor = self.conn.cursor()
+                cursor.execute("SELECT * FROM activities")
+                rows = cursor.fetchall()
+                activities_list = [dict(row) for row in rows]
+                for el in activities_list:
+                    print(el)
+            except sqlite3.Error as e:
+                print(e)
 
     # def remove(self, n): #TODO Удаление активности
     #     del self.activities[n]
