@@ -18,7 +18,7 @@ class Activities:
                 duration TEXT
                 )""")
                 conn.commit()
-                print('Table created successfully')
+                print('Таблица успешно создана!')
         except sqlite3.Error as e:
             print(e)
 
