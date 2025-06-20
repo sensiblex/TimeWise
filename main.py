@@ -4,7 +4,7 @@ from activity import *
 storage = Activities()
 while True:
     try:
-        com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить: "))
+        com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить, 3 - Активности за день: "))
         if com == -1:
             print("Выход")
             break
@@ -22,6 +22,9 @@ while True:
             storage.show()
             n = int(input('Введите номер активности которую нужно удалить: '))
             storage.remove(n)
+
+        elif com == 3:
+            storage.report()
 
     except ValueError:
         print('Неверное значение')
