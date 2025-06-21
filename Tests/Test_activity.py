@@ -10,7 +10,10 @@ class MyTestCase(unittest.TestCase): #TODO сделать норм тесты
         self.assertEqual(60, activity.duration)
 
     def test_data(self):
-        ...
+        self.assertRaises(ValueError, Activity, '', 'sport', 60)
+        self.assertRaises(ValueError, Activity, 's', '', 123)
+        self.assertRaises(ValueError, Activity, 's', 's', -1)
+
 
 
 if __name__ == '__main__':
