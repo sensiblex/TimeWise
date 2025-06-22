@@ -15,10 +15,11 @@ class Activities:
                 time TEXT,
                 name TEXT,
                 type_of_activity TEXT,
-                duration TEXT
+                duration INTEGER
                 )""")
+                cursor.execute("""CREATE INDEX IF NOT EXISTS idx_time ON activities(time)""")
                 conn.commit()
-                print('Table created successfully')
+                print('Таблица успешно создана!')
         except sqlite3.Error as e:
             print(e)
 
@@ -65,11 +66,10 @@ class Activities:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
                 today_date = datetime.today().strftime('%d.%m.%Y')
-                cursor.execute("SELECT time, name, type_of_activity, duration FROM activities")
+                cursor.execute("SELECT time, name, type_of_activity, duration FROM activities WHERE time=?", (today_date,))
                 rows = cursor.fetchall()
                 if rows:
                     for row in rows:
-                        if today_date == datetime.strptime(row[0], '%d.%m.%Y').strftime('%d.%m.%Y'):
                             print(*row)
                 else:
                     print('На сегодня пусто')
