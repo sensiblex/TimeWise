@@ -1,11 +1,12 @@
 import sqlite3
 from datetime import datetime
-
-
+import logging
+logging.basicConfig(level=logging.DEBUG, filename='my_log.log', format='%(asctime)s - %(name)s - %(levelname)s - (%(lineno)d) [%(filename)s] - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filemode='a')
 class Activities:
     def __init__(self, bd='activities.db' ):
         self.db_name = bd
         self._create_table()
+        logging.debug('Activities table initialized')
 
     def _create_table(self):
         try:
@@ -19,22 +20,23 @@ class Activities:
                 )""")
                 cursor.execute("""CREATE INDEX IF NOT EXISTS idx_time ON activities(time)""")
                 conn.commit()
-                print('Таблица успешно создана!')
+                logging.info("Table created successfully")
         except sqlite3.Error as e:
-            print(e)
+            logging.exception(e)
 
     def add(self, activity):
         try:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
-                __time = str(activity.time)
-                __name = activity.name
-                __type_of_activity = activity.type_of_activity
-                __duration = str(activity.duration)
-                cursor.execute("INSERT INTO activities (time, name, type_of_activity, duration) VALUES (?, ?, ?, ?)", (__time, __name, __type_of_activity, __duration))
+                time = activity.time
+                name = activity.name
+                type_of_activity = activity.type_of_activity
+                duration = activity.duration
+                cursor.execute("INSERT INTO activities (time, name, type_of_activity, duration) VALUES (?, ?, ?, ?)", (time, name, type_of_activity, duration))
                 conn.commit()
+                logging.info(f"Added activity successfully name: {name}, type: {type_of_activity}, duration: {duration}")
         except sqlite3.Error as e:
-            print(e)
+            logging.exception(e)
 
     def show(self):
         try:
@@ -47,19 +49,27 @@ class Activities:
                     activities_list =[dict(row) for row in rows]
                     for el in activities_list:
                         print(el)
+                    logging.info("Activities showed successfully")
                 else:
-                    print('Пустовато :(')
+                    print("No activities found")
+                    logging.info("No activities found")
         except sqlite3.Error as e:
-            print(e)
+            logging.error(e, exc_info=True)
 
     def remove(self, n):
         try:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
                 cursor.execute("DELETE FROM activities WHERE rowid = (?)", (n,))
+                if cursor.rowcount == 0:
+                    print(f"No activity found with rowid: {n}")
+                    logging.warning(f"No activities found with rowid: {n}")
+                else:
+                    print('Removed activity successfully')
+                    logging.info(f"Removed activity successfully with rowid: {n}")
                 conn.commit()
         except sqlite3.Error as e:
-            print(e)
+            logging.exception(e)
 
     def report(self):
         try:
@@ -72,10 +82,11 @@ class Activities:
                     for row in rows:
                             print(*row)
                 else:
-                    print('На сегодня пусто')
+                    print('There is no activity for today')
+                    logging.info(f"No activities found for date: {today_date}")
 
         except sqlite3.Error as e:
-            print(e)
+            logging.exception(e)
 
 # conn = sqlite3.connect('activities.db')
 # cursor = conn.cursor()
