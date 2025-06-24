@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 import logging
+from tabulate import tabulate
 logging.basicConfig(level=logging.DEBUG, filename='my_log.log', format='%(asctime)s - %(name)s - %(levelname)s - (%(lineno)d) [%(filename)s] - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filemode='a')
 class Activities:
     def __init__(self, bd='activities.db' ):
@@ -93,12 +94,13 @@ class Activities:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
                 cursor.execute("SELECT time, type_of_activity, SUM(duration) FROM activities WHERE time = ? GROUP BY time, type_of_activity", (date,))
-                a = cursor.fetchall()
-                for i in range(len(a)):
-                    print(a[i][0], a[i][1], a[i][2])
+                rows = cursor.fetchall()
+                headers = ['Дата', 'Тип активности', 'Общее время(минут)']
+                if rows:
+                    print(tabulate(rows, headers=headers, tablefmt='grid'))
 
-
-
+                else:
+                    print(f'За {date} пусто')
         except sqlite3.Error as e:
             logging.exception(e)
 
@@ -108,7 +110,7 @@ class Activities:
 # cursor.execute("DROP TABLE activities")
 # conn.commit()
 # conn.close()
-
-act = Activities()
-# act.show()
-act.show_stats('23.06.2025')
+#
+# act = Activities()
+# # act.show()
+# act.show_stats('24.06.2025')

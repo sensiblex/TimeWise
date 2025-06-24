@@ -1,10 +1,11 @@
 from activities import *
 from activity import *
 
+
 storage = Activities()
 while True:
     try:
-        com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить, 3 - Активности за день: "))
+        com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить, 3 - Активности за день, 4 - Статистика за день: "))
         if com == -1:
             print("Выход")
             break
@@ -25,6 +26,13 @@ while True:
 
         elif com == 3:
             storage.report()
+
+        elif com == 4:
+            dat = input("Введите дату формата 'дд.мм.гггг'(0 - если за сегодня): ")
+            if dat == '0':
+                storage.show_stats()
+            else:
+                storage.show_stats(dat)
 
     except ValueError:
         print('Неверное значение')
