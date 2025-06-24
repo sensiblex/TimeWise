@@ -88,8 +88,27 @@ class Activities:
         except sqlite3.Error as e:
             logging.exception(e)
 
+    def show_stats(self, date=datetime.today().strftime('%d.%m.%Y')):
+        try:
+            with sqlite3.connect(self.db_name) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT time, type_of_activity, SUM(duration) FROM activities WHERE time = ? GROUP BY time, type_of_activity", (date,))
+                a = cursor.fetchall()
+                for i in range(len(a)):
+                    print(a[i][0], a[i][1], a[i][2])
+
+
+
+        except sqlite3.Error as e:
+            logging.exception(e)
+
+
 # conn = sqlite3.connect('activities.db')
 # cursor = conn.cursor()
 # cursor.execute("DROP TABLE activities")
 # conn.commit()
 # conn.close()
+
+act = Activities()
+# act.show()
+act.show_stats('23.06.2025')
