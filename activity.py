@@ -1,57 +1,56 @@
 import datetime as tm
 
-class Activity:
-    def __init__(self, name="Без названия", activity="Общее", duration=1):
-        self.time = tm.datetime.now().strftime("%d.%m.%Y")
-        self.name = name
-        self.type_of_activity = activity
-        self.duration = duration
+from pydantic import BaseModel, field_validator
 
-    def _is_valid_name(self, name):
-        return isinstance(name, str) and len(name) > 0
+class Activity(BaseModel):
+    time: str
+    name: str
+    type_of_activity: str
+    duration: int
 
-    def _is_valid_duration(self, duration):
-        return isinstance(duration, int) and duration > 0
+    @field_validator('time', mode='before')
+    def parse_custom_date(cls, value):
+        if isinstance(value, str):
+            value = value.strip()
+            try:
+                return str(tm.datetime.strptime(value, '%d.%m.%Y').date().strftime('%d.%m.%Y'))
 
-    def _is_valid_type(self, type_of_activity):
-        return isinstance(type_of_activity, str) and len(type_of_activity) > 0
+            except ValueError:
+                raise ValueError('Invalid date')
+        elif isinstance(value, tm.date):
+            return value.strftime('%d.%m.%Y')
+        raise ValueError('Invalid date')
 
-    @property
-    def name(self):
-        return self._name
+    @field_validator('name', mode='before')
+    def parse_custom_name(cls, value):
+        if isinstance(value, str):
+            if len(value) > 0:
+                return value
+            raise ValueError('name cannot be empty')
+        return str(value)
 
-    @name.setter
-    def name(self, value):
-        if not self._is_valid_name(value):
-            raise ValueError("Invalid name")
-        self._name = value
+    @field_validator('type_of_activity', mode='before')
+    def parse_custom_type_of_activity(cls, value):
+        if isinstance(value, str):
+            if len(value) > 0 and len(value) < 50:
+                return value
+            raise ValueError('type_of_activity cannot be empty and less than 50 characters')
+        return str(value)
 
-    @property
-    def duration(self):
-        return self._duration
-
-    @duration.setter
-    def duration(self, value):
-        if not self._is_valid_duration(value):
-            raise ValueError("Invalid duration")
-        self._duration = value
-
-    @property
-    def type_of_activity(self):
-        return self._type_of_activity
-
-    @type_of_activity.setter
-    def type_of_activity(self, value):
-        if not self._is_valid_type(value):
-            raise ValueError("Invalid type")
-        self._type_of_activity = value
+    @field_validator('duration', mode='before')
+    def parse_custom_duration(cls, value):
+        if isinstance(value, int):
+            return value
+        raise ValueError('duration must be an integer')
 
     def __str__(self):
         return f"""Дата создания: {self.time}
 Название: {self.name}
 Тип активности: {self.type_of_activity}
 Продолжительность: {self.duration}
-        """
+"""
 
     def __eq__(self, other):
         return self.name == other.name
+
+print(Activity(time='25.06.2025', name="sport", type_of_activity='sporting', duration=120))
