@@ -1,8 +1,10 @@
 from activities import *
 from activity import *
+import re
 
 
 storage = Activities()
+
 while True:
     try:
         com = int(input("Введите команду(-1 - Выйти, 0 - Печать всех активностей, 1 - Добавить, 2 - Удалить, 3 - Активности за день, 4 - Статистика за день: "))
@@ -12,10 +14,11 @@ while True:
         elif com == 0:
             storage.show()
         elif com == 1:
+            time = datetime.now().strftime('%d.%m.%Y')
             name = input("Введите название активности: ")
             type_of_activity = input("Введите тип активности: ")
             duration = int(input("Введите продолжительность активности(в минутах): "))
-            act = Activity(name, type_of_activity, duration)
+            act = Activity(time = time, name = name, type_of_activity=type_of_activity, duration=duration)
             storage.add(act)
             print(f'Добавлена активность {act}')
         elif com == 2:
@@ -33,6 +36,25 @@ while True:
                 storage.show_stats()
             else:
                 storage.show_stats(dat)
+        else:
+            print('Invalid com!')
 
-    except ValueError:
-        print('Неверное значение')
+    except ValueError as e:
+        print('Неверное значение', e)
+
+
+def check_valid_date(dt):
+    pattern = r'\d{2}\.\d{2}\.\d{4}'
+    if re.match(pattern, dt):
+        return True
+    return False
+
+def check_valid_name(nm):
+    if isinstance(nm, str) and len(nm) in range(1, 21) and nm != ' ':
+        return True
+    return False
+
+def check_valid_type(tp):
+    if isinstance(tp, str) and len(tp) in range(1, 51) and tp != ' ':
+        return True
+    return False

@@ -8,6 +8,8 @@ class Activity(BaseModel):
     type_of_activity: str
     duration: int
 
+    
+
     @field_validator('time', mode='before')
     def parse_custom_date(cls, value):
         if isinstance(value, str):
@@ -16,10 +18,10 @@ class Activity(BaseModel):
                 return str(tm.datetime.strptime(value, '%d.%m.%Y').date().strftime('%d.%m.%Y'))
 
             except ValueError:
-                raise ValueError('Invalid date')
+                raise ValueError('Invalid date, cant use this date')
         elif isinstance(value, tm.date):
             return value.strftime('%d.%m.%Y')
-        raise ValueError('Invalid date')
+        raise ValueError('Invalid date, must be str or date class')
 
     @field_validator('name', mode='before')
     def parse_custom_name(cls, value):
@@ -53,4 +55,4 @@ class Activity(BaseModel):
     def __eq__(self, other):
         return self.name == other.name
 
-print(Activity(time='25.06.2025', name="sport", type_of_activity='sporting', duration=120))
+# act = Activity(time='25.06.2025', name="sport", type_of_activity='sporting', duration=120)
