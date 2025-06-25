@@ -1,7 +1,13 @@
 import sqlite3
 from datetime import datetime
 import logging
-from tabulate import tabulate
+import matplotlib.pyplot as plt
+
+#TODO оптимизировать подключение баз данных
+#TODO валидация входных данных
+#TODO обработка оишбок
+#TODO логирование
+
 logging.basicConfig(level=logging.DEBUG, filename='my_log.log', format='%(asctime)s - %(name)s - %(levelname)s - (%(lineno)d) [%(filename)s] - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', filemode='a')
 class Activities:
     def __init__(self, bd='activities.db' ):
@@ -90,14 +96,20 @@ class Activities:
             logging.exception(e)
 
     def show_stats(self, date=datetime.today().strftime('%d.%m.%Y')):
+
         try:
             with sqlite3.connect(self.db_name) as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT time, type_of_activity, SUM(duration) FROM activities WHERE time = ? GROUP BY time, type_of_activity", (date,))
+                cursor.execute("SELECT time, type_of_activity, SUM(duration) FROM activities WHERE time = ? GROUP BY type_of_activity", (date,))
                 rows = cursor.fetchall()
-                headers = ['Дата', 'Тип активности', 'Общее время(минут)']
                 if rows:
-                    print(tabulate(rows, headers=headers, tablefmt='grid'))
+                    ax = plt.subplot()
+                    types = [type[1] for type in rows]
+                    mins = [min[2] for min in rows]
+                    ax.bar(types, mins)
+                    ax.set_ylabel('Кол-во минут')
+                    ax.set_title('Соотношение типа активности и времени')
+                    plt.show()
 
                 else:
                     print(f'За {date} пусто')
@@ -112,5 +124,5 @@ class Activities:
 # conn.close()
 #
 # act = Activities()
-# # act.show()
-# act.show_stats('24.06.2025')
+#
+# act.show_stats('23.06.2025')

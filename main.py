@@ -11,7 +11,6 @@ while True:
             break
         elif com == 0:
             storage.show()
-            pass
         elif com == 1:
             name = input("Введите название активности: ")
             type_of_activity = input("Введите тип активности: ")
@@ -21,8 +20,9 @@ while True:
             print(f'Добавлена активность {act}')
         elif com == 2:
             storage.show()
-            n = int(input('Введите номер активности которую нужно удалить: '))
-            storage.remove(n)
+            n = int(input('Введите номер активности которую нужно удалить(-1 отмена): '))
+            if n != -1:
+                storage.remove(n)
 
         elif com == 3:
             storage.report()
